@@ -1,0 +1,44 @@
+1. IE条件注释
+<!--[if IE 6]>
+here are something for IE6
+<![endif]-->
+
+2. 解决超链接访问后hover样式不出现的问题
+因为将a:visited和a:hover顺序放错了，正确的顺序应该是love hate(link visited hover active)
+
+3.hasLayout
+解决IE下的一些奇怪问题，例如设置border时会断开，刷新后又正常，就是没有触发hasLayout属性。
+设置width、height、relative等都会触发hasLayout属性，但会带来些副作用。
+一般用zoom:1来触发hasLayout，如果无效，用position:relative。
+
+4. display:inline-block
+具有块级元素的特征（可以设置margin/padding），同时又不会占一行。
+在ie7中对行内元素触发hasLayout就可以模拟inline-block，同时注意用vertical-align:-10px(块的高度）来使内容居顶（正常的inline-block是居顶的）
+
+5.relative、absolute和float
+设置postion:relative和absolute会让元素浮起来脱离文档流，也就是z-index大于0.
+relative会保留自己在z-index:0层的占位,left,top,right,bottom值是相对于自己在z-index:0层的位置，虽然它的实际位置可能因为设置了left、top、bottom、right值而偏离原来在文档流中的位置，但对其他仍然在z-index:0层的位置不会造成影响。
+absolute会完全脱离文档流，不再在z-index:0层保留占位符，其right、top、left、bottom是相对于自己最近的一个设置了position:relative或absolute的前一个元素，如果没有前一个元素，则相对于body.
+float:不会让元素浮起来，只是改变正常文档流的排列，会影响周围元素，不能通过top/left/bottom/right来定位。
+
+position:absolute和float会隐式的改变元素的display类型，不论之前元素是什么display（none除外）设置了这两个属性后，都会让元素以display:inline-block显示，可以设置宽度等，就算显式的设置了inline或block都无效。但position:relative却不会隐式的改变display的类型。
+
+
+6.水平居中
+行内元素：text-align:center;
+
+确定宽度的块级元素：margin-left:auto和margin-right:auto;
+
+不确定宽度的块级元素：
+1）用table包裹要居中的元素,同时给Table设置margin-left:auto和margin-right:auto。table不需要设置宽度就可以用margin auto居中
+2）改变块级元素为inline，然后用text-align:center居中
+3）给父元素设置float，并设置position:relative和left:50%，子元素设置position:relative和left:-50%
+
+7.垂直居中
+父元素高度不确定的文本、图片、块级元素：通过给父容器设置相同的上下边距（padding)
+
+父元素高度确定的单行文本：给父元素设置line-height=父元素高度
+
+父元素高度确定的多行文本、图片、块级元素：
+1）用表格,vertical-align在父元素为td或者th有效
+2）对支持display:table-cell的ie8以上浏览器用display:table-cell和vetical-align:middle实现，对不支持的ie6和ie7用父子两层元素分别设置position:absolute,top:50%和position:relative,top:-50%
